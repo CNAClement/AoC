@@ -1,0 +1,24 @@
+git remote add origin git@github.com:CNAClement/AoC.git
+
+C'est une url SSH (qui a nécessité de créer les clés :
+ssh-keygen -t ed25519 -C "adresse_clement@.fr"
+Clé publique déposée dans /c/Users/MOI/.ssh/id_ed25519.pub
+
+
+Alternative : utiliser une URL HTTPS :
+git remote add origin https://github.com/utilisateur/repo.git
+Et configurer des identifiants (PAT ==> Personal Access Token).
+GitHub > Settings > Developer settings > Personal Access Tokens     > Generate new token.
+
+ps : pour le fun, l'image randomart de ma PK :
++--[ED25519 256]--+
+|+o..=Bo.         |
+|.++. .B..        |
+|++oo +.+         |
+|+o=.+.=..        |
+|.o o.*ooS        |
+|  o.+.o=         |
+|   +.o= .        |
+|    == .         |
+|   . .o E        |
++----[SHA256]-----+
