@@ -8,12 +8,12 @@ for i, line in enumerate(open(r"C:\Users\CNAAR\OneDrive - Sopra Steria\Desktop\A
     tgt, x, *Y = map(int, findall(r'\d+', line))
 
     X = [x]
+
     for y in Y:
-        X = [op(x,y) for x in X for op in (add,mul,cat)]
+        X = [op(x,y) for x in X for op in (add,mul)]
 
     if tgt in X:
         ans += tgt
-        print(i)
-        print(line)
+        print(f"correction : ligne n° {i+1} : {line} ")
 
 print(ans)
