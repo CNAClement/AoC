@@ -1,14 +1,16 @@
 import re
 # 6391289353235 too low
+# 6382287282786 encore plus low mais le code est mieux
+# 61561126043536
 
 def execution_jour7_partie1(chemin_fichier):
     lignes=lecture_fichier(chemin_fichier)
+    lignes = ["5560244397: 722 77 4 7 37 4 1 3 97"]
     somme_totale = 0
-    lignes = ["20: 4 5 11"]
     #for ligne in lignes :
     for num_ligne, ligne in enumerate(lignes): #enumerate pour suivre le num de la ligne traitée à cause de la brute force
-        #print(f"On traite la ligne n° {num_ligne} : {ligne}")
         liste_decomposee = pattern(ligne)
+        print(liste_decomposee)
         if calcul(liste_decomposee) :  # renvoie True si une combinaison d'opérations renvoie le premier terme
             somme_totale += liste_decomposee[0]
             print(f"ligne n° {num_ligne +1}")
@@ -30,23 +32,22 @@ def pattern(ligne) :
 
 def calcul(liste_nombres) :
     liste_resultats=[liste_nombres[1]] # On initialise une liste, au début elle ne contient que le premier membre de la suite.
-    print(liste_nombres)
     for i in range(2,len(liste_nombres)):
-        print(f"On traite la {i}eme occurrence.")
-        for resultat in liste_resultats :
-            print(f"On traite {resultat}")
-            liste_resultats = [res for res in liste_resultats if res != resultat] #on modifie la liste pour enlever le nombre que l'on est en train de traiter
-            if resultat < liste_nombres[0] :
+        liste_resultats_figee=liste_resultats.copy() # Evite modification in place, ce qui pose des problèmes sur le for
+        print(f"\n\n\nliste (figée) des résultats traités : {liste_resultats_figee}")
+        for resultat in liste_resultats_figee :
                 resultat_somme = resultat + liste_nombres[i]
                 resultat_multiplication = resultat * liste_nombres[i]
                 if resultat_somme not in liste_resultats :
                     liste_resultats.append(resultat_somme)
                 if resultat_multiplication not in liste_resultats :
                     liste_resultats.append(resultat_multiplication)
-                print(f"A partir de la valeur {resultat} et du {i}eme membre de la liste ({liste_nombres[i]}), "
-                      f"on obtient deux valeurs : {resultat_somme} (somme) et {resultat_multiplication} (multiplication).\n"
-                      f"La liste de résultats vaut maintenant : {liste_resultats}.\n")
-    print(f"{liste_nombres[0] in liste_resultats} ? Avec {liste_nombres[0]} dans {liste_resultats}")
+                liste_resultats.remove(resultat)  # on n'enlève qu'une seule valeur trouvée. Ainsi, si on a calculé 20 et qu'une valeur 20
+                # était déjà dans la liste, on n'enlève que la première, que l'on vient de traiter.
+        print(f"A partir de la valeur {resultat} de la liste résultats et du {i}eme membre de la liste des opérations ({liste_nombres[i]}), "
+                  f"on obtient deux valeurs : {resultat_somme} (somme) et {resultat_multiplication} (multiplication).\n"
+                  f"La liste de résultats (de longueur {len(liste_resultats)}) vaut maintenant : {liste_resultats}.\n")
+
     return liste_nombres[0] in liste_resultats
 
 

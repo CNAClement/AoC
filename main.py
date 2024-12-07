@@ -28,7 +28,7 @@ def recuperation_donnees(jour, chemin_fichier):
         print(f"Erreur lors de l'accès à la page : {response.status_code}")
 
 if __name__ == '__main__':
-    test = True
+    test = False
     jour = 7
     partie = 1
     chemin_fichier=rf"C:\Users\CNAAR\OneDrive - Sopra Steria\Desktop\Avent\2024\{jour}_test.txt" if test \
