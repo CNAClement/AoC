@@ -30,7 +30,7 @@ def recuperation_donnees(jour, chemin_fichier):
 if __name__ == '__main__':
     test = False
     jour = 7
-    partie = 1
+    partie = 2
     chemin_fichier=rf"C:\Users\CNAAR\OneDrive - Sopra Steria\Desktop\Avent\2024\{jour}_test.txt" if test \
             else rf"C:\Users\CNAAR\OneDrive - Sopra Steria\Desktop\Avent\2024\{jour}.txt"
 
@@ -40,6 +40,7 @@ if __name__ == '__main__':
     fonction_jour = f"execution_jour{jour}_partie{partie}"
     start = time.time()
 
+    # Si nécessaire, on récupère les données sur le site.
     if (test == False and not os.path.exists(chemin_fichier) ) :
         recuperation_donnees(jour, chemin_fichier)
 

@@ -1,12 +1,8 @@
 import re
-# 6391289353235 too low
-# 6382287282786 encore plus low mais le code est mieux
-# 6392012777720 ok
 
 
-def execution_jour7_partie1(chemin_fichier):
+def execution_jour7_partie2(chemin_fichier ):
     lignes=lecture_fichier(chemin_fichier)
-    #lignes = ["5876: 7 5 1 27 39 1 5 15 26"]
     somme_totale = 0
     #for ligne in lignes :
     for num_ligne, ligne in enumerate(lignes): #enumerate pour suivre le num de la ligne traitée à cause de la brute force
@@ -31,7 +27,7 @@ def pattern(ligne) :
     liste_decomposee = [int(x) for x in liste_decomposee]
     return liste_decomposee
 
-def calcul(liste_nombres) :
+def calcul(liste_nombres  ) :
     liste_resultats=[liste_nombres[1]] # On initialise une liste, au début elle ne contient que le premier membre de la suite.
     for i in range(2,len(liste_nombres)):
         liste_resultats_figee=liste_resultats.copy() # Evite modification in place, ce qui pose des problèmes sur le for
@@ -40,12 +36,15 @@ def calcul(liste_nombres) :
             if resultat <= liste_nombres[0] :
                 resultat_somme = resultat + liste_nombres[i]
                 resultat_multiplication = resultat * liste_nombres[i]
+                resultat_concatenation = int(str(resultat) + str(liste_nombres[i]))
+
                 liste_resultats.append(resultat_somme)
                 liste_resultats.append(resultat_multiplication)
+                liste_resultats.append(resultat_concatenation)
                 liste_resultats.remove(resultat)  # on n'enlève qu'une seule valeur trouvée. Ainsi, si on a calculé 20 et qu'une valeur 20
                 # était déjà dans la liste, on n'enlève que la première, que l'on vient de traiter.
         #print(f"A partir de la valeur {resultat} de la liste résultats et du {i}eme membre de la liste des opérations ({liste_nombres[i]}), "
-         #         f"on obtient deux valeurs : {resultat_somme} (somme) et {resultat_multiplication} (multiplication).\n"
+         #         f"on obtient trois valeurs : {resultat_somme} (somme) , {resultat_multiplication} (multiplication) et {resultat_concatenation} (concaténation).\n"
           #        f"La liste de résultats (de longueur {len(liste_resultats)}) vaut maintenant : {liste_resultats}.\n")
 
     return liste_nombres[0] in liste_resultats
