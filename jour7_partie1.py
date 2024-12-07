@@ -41,9 +41,7 @@ def calcul(liste_nombres) :
                 resultat_multiplication = resultat * liste_nombres[i]
                 liste_resultats.append(resultat_somme)
                 liste_resultats.append(resultat_multiplication)
-                if liste_nombres[i] != 1 : #pas très propre de le faire comme ça, mais c'est un cas limite où on veut garder le résultat.
-                    # En effet, si on fait 32*1 , on veut que le 32 obtenu serve de base aux calculs futurs.
-                    liste_resultats.remove(resultat)  # on n'enlève qu'une seule valeur trouvée. Ainsi, si on a calculé 20 et qu'une valeur 20
+                liste_resultats.remove(resultat)  # on n'enlève qu'une seule valeur trouvée. Ainsi, si on a calculé 20 et qu'une valeur 20
                 # était déjà dans la liste, on n'enlève que la première, que l'on vient de traiter.
         #print(f"A partir de la valeur {resultat} de la liste résultats et du {i}eme membre de la liste des opérations ({liste_nombres[i]}), "
          #         f"on obtient deux valeurs : {resultat_somme} (somme) et {resultat_multiplication} (multiplication).\n"
