@@ -24,6 +24,8 @@ def lecture_fichier(chemin_fichier):
         lignes = contenu.splitlines()
         return lignes
 
+def chargement_tableau
+
 def pattern(ligne) :
     pattern = re.compile(r"(\d+)+")
     liste_decomposee = pattern.findall(ligne)  #renvoie une liste dont le premier terme est le résultat du calcul cherché et les autres termes sont les composants de ce calcul

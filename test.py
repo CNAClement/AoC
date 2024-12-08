@@ -1,19 +1,8 @@
-from re import findall
-from operator import add, mul
+ense = {(4, 2), (2, -1), (10, 11), (12, 14)}
+ens2 = {(1,1)}
 
-cat = lambda x,y: int(str(x) + str(y))
+en3= ense.union(ens2)
 
-ans = 0
-for i, line in enumerate(open(r"C:\Users\CNAAR\OneDrive - Sopra Steria\Desktop\Avent\2024\7.txt")):
-    tgt, x, *Y = map(int, findall(r'\d+', line))
-
-    X = [x]
-
-    for y in Y:
-        X = [op(x,y) for x in X for op in (add,mul)]
-
-    if tgt in X:
-        ans += tgt
-        print(f"correction : ligne n° {i+1} : {line} ")
-
-print(ans)
+vide=set()
+print(vide)
+print(vide.union(en3))

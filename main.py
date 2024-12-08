@@ -29,7 +29,7 @@ def recuperation_donnees(jour, chemin_fichier):
 
 if __name__ == '__main__':
     test = False
-    jour = 7
+    jour = 8
     partie = 2
     chemin_fichier=rf"C:\Users\CNAAR\OneDrive - Sopra Steria\Desktop\Avent\2024\{jour}_test.txt" if test \
             else rf"C:\Users\CNAAR\OneDrive - Sopra Steria\Desktop\Avent\2024\{jour}.txt"
