@@ -1,8 +1,3 @@
-ense = {(4, 2), (2, -1), (10, 11), (12, 14)}
-ens2 = {(1,1)}
+ligne = "009..111...2...333.44.5555.6666.777.88889."
 
-en3= ense.union(ens2)
-
-vide=set()
-print(vide)
-print(vide.union(en3))
+print(ligne.findall("9"))
