@@ -1,74 +1,85 @@
-import numpy as np
-from itertools import combinations
+""" Nouvelle idée :
+ On parcourt la ligne pour faire un dictionnaire permettant d'associer un identifiant et sa ou ses positions sur la ligne "transformée"
+  (qu'on ne transforme pas effectivement, pour des questions de performance et de brute force).
+
+ Puis une deuxième fonction qui repère la position de tous les "." disponibles, et modifie la dernière position de l'identifiant
+  ( dictionnaire = {identifiant, position} et dictionnaire[identifiant][-1] = premiere_position_point .
+  Une position qui n'est pas dans le dictionnaire (not in value) est occupée par un point. """
+
+import re
 from utils_clement import lecture_fichier, chargement_tableau, reperage_position_caractere
 
 
 def execution_jour9_partie1(chemin_fichier):
     ligne=lecture_fichier(chemin_fichier) #il n'y a qu'une seule ligne.
-    nouvelle_ligne = transformation_ligne(ligne[0])
-    print("fin de la transformation")
-    partie_stable = ""
-    partie_a_traiter = nouvelle_ligne
-    while not condition_fin(partie_a_traiter) :
-        partie_stable_iteration , partie_a_traiter = traitement_espaces_vides(partie_a_traiter)
-        partie_stable += partie_stable_iteration
+    nb_total_identifiants = len(ligne[0])//2
+    print(f"nombre total d'identifiants : {nb_total_identifiants}")
 
-    nouvelle_ligne = partie_stable + partie_a_traiter
-    print(calcul_resultat(nouvelle_ligne))
+    dictionnaire_identifiant_position = alimentation_dictionnaire_identifiant_position(ligne[0])
+    print(f"fin de l'initialisation du dictionnaire : {dictionnaire_identifiant_position}" )
+    while not condition_fin(dictionnaire_identifiant_position) :
+        dictionnaire_identifiant_position = deplacement_identifiants(dictionnaire_identifiant_position)
+    print(f"Résultat partie 1 : {calcul_resultat(dictionnaire_identifiant_position)}")
 
 
 
-def transformation_ligne(ligne) :
-    # Lire l'énoncé https://adventofcode.com/2024/day/9 , je ne l'expliquerai pas mieux. Pour une ligne donnée
-    # composée successivement de blocks de fichiers et de blocks vides, on applique une transformation en mettant des "." pour les blocks vides et
-    # un id fichier pour les blocks fichiers.
-    nouvelle_ligne = ""
-    for indice, chiffre in enumerate(ligne):
-        for nombre_blocks_fichier in range(int(chiffre)):
-            # On récupère le chiffre dans l'input et on ajoute dans "nouvelle_ligne" autant de caractères que le chiffre trouvé.
-            if indice % 2 == 0:
-                # Une fois sur deux, on rajoute "indice / 2" (car dans l'exo, on ne doit incrémenter
-                # l'id block qu'une fois sur deux. Par exemple pour l'indice 10 et le chiffre "4" ,
-                # on ajoute "5555" à nouvelle_ligne (on a 4 blocks dont on rajoute 4 "5' ).
-                nouvelle_ligne += str(indice // 2)
-            else:
-                # L'autre fois sur deux, on rajoute des "." , par exemple, si on lit le chiffre "4",
-                # On ajoute  "...." à nouvelle_ligne.
-                nouvelle_ligne += "."
 
-    return nouvelle_ligne
+def alimentation_dictionnaire_identifiant_position(ligne) :
+    # print(f"ligne traitée : {ligne}")
+    dictionnaire_identifiant_position = {}
+    position_sur_nouvelle_ligne = 0
+    for position_caractere, caractere in enumerate(ligne) :
+        # print(f"On traite le caractère {caractere} (position {position_caractere} de la ligne).")
+        # print(f"Equivaut à la position : {position_sur_nouvelle_ligne}")
+        if position_caractere % 2 == 0: # une fois sur deux, on traite un block file auquel on doit affecter un identifiant
+            dictionnaire_identifiant_position[position_caractere//2] = [position_sur_nouvelle_ligne + _ for _ in range(int(caractere)) ]
+        position_sur_nouvelle_ligne += int(caractere) # Si on tombe sur 3, alors on occupe 3 espace sur la ligne transformée
 
-def condition_fin(ligne) :
+    return dictionnaire_identifiant_position
+
+def deplacement_identifiants(dictionnaire_identifiant_position) :
+    # On repère la position de l'indice qui est le "plus à droite" sur la nouvelle ligne transformée,
+    # c'est à dire celui qui a la position associée la plus haute dans le dictionnaire
+    position_identifiant_a_deplacer = recherche_position_dernier_identifiant(dictionnaire_identifiant_position)
+    for cle in dictionnaire_identifiant_position.keys() : #rappel : la valeur associée à l'identifiant est une liste d'au moins une position.
+        if position_identifiant_a_deplacer in dictionnaire_identifiant_position[cle] :
+            identifiant_a_deplacer = cle
+    # print(f"identifiant à déplacer : {identifiant_a_deplacer} , position : {position_identifiant_a_deplacer}")
+
+    # On repère la position du premier point, et on met à jour le dictionnaire en disant que la nouvelle position
+    # de l'identifiant à déplacer vaut désormais la position du point.
+    position_premier_point = recherche_position_premier_point(dictionnaire_identifiant_position)
+    # print(f"position du premier point : {position_premier_point}")
+    dictionnaire_identifiant_position[identifiant_a_deplacer].append(position_premier_point)
+    dictionnaire_identifiant_position[identifiant_a_deplacer].remove(position_identifiant_a_deplacer)
+
+    return dictionnaire_identifiant_position
+
+
+def recherche_position_premier_point(dic) :
+
+    # La position du premier point est la première valeur qui n'apparait pas dans le dictionnaire
+    # (c'est à dire qui n'est pas occupée par un indice)
+
+    position_premier_point = 0 # C'est pour initialiser, on sait que cette position est forcément occupée par l'identifiant 0
+    while any(position_premier_point in liste for liste in dic.values()):
+        #Si on trouve cette position dans l'une des listes (valeurs du dictionnaire), c'est que la position est déjà
+        # occupée par un identifiant, donc pas par un point. Donc on teste le point suivant.
+        position_premier_point += 1
+    return position_premier_point
+
+def recherche_position_dernier_identifiant(dic) :
+    max = 0
+    for valeur in dic.values():
+        for _ in range(len(valeur)):
+            if valeur[_] > max:
+                max = valeur[_]
+    return max
+
+def condition_fin(dic) :
     # Tant que la condition n'est pas remplie et qu'il existe au moins un "." à gauche du dernier chiffre, on continue.
-    position_premier_point = ligne.find(".")
-    position_dernier_chiffre =  max((i for i, caractere in enumerate(ligne) if caractere.isdigit()), default=-1)
-    return position_premier_point > position_dernier_chiffre
+    return recherche_position_premier_point(dic) > recherche_position_dernier_identifiant(dic)
 
 
-def traitement_espaces_vides(ligne) :
-    # print(f"On traite la ligne {ligne}")
-    # On récupère le dernier block de fichiers et on le déplace à gauche sur le premier block vide (".") disponible.
-    indice_envers = len(ligne) - 1 #on part de la fin
-    while indice_envers >= 0 and ligne[indice_envers] == "." :
-        indice_envers -= 1
-
-    if indice_envers >= 0:  # On a trouvé un caractère autre que "." , on le stocke et on le remplace par un "."
-        chiffre_trouve = ligne[indice_envers]
-        ligne = ligne[:indice_envers] + "." + ligne[indice_envers+1:]
-        indice_endroit = 0
-        while indice_endroit < len(ligne) and ligne[indice_endroit] != "." :
-            indice_endroit += 1
-        if indice_endroit < len(ligne) : # On a trouvé un "." , on le remplace par le chiffre trouvé précédemment
-            partie_stable = ligne[:indice_endroit] # Cette partie de la ligne ne bougera plus, on ne la traite plus.
-            partie_a_traiter = chiffre_trouve+ligne[indice_endroit+1:]
-    else:
-        print("Tous les caractères sont '.'")
-    return partie_stable , partie_a_traiter
-
-def calcul_resultat(ligne):
-    ligne_sans_point = ligne.replace(".","")
-    checksum = 0
-    for position, chiffre in enumerate(ligne_sans_point) :
-        checksum += position * int(chiffre)
-    return checksum
-
+def calcul_resultat(dic):
+    return sum(identifiant * position for identifiant, positions in dic.items() for position in positions)
