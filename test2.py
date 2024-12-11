@@ -1,7 +1,17 @@
 import re
 dic = {0: '11', 1: '4', 2: '31', 3: '7', 4: '12', 5: '6' , 6 : '0' , 7 : '1'  }
 
+del dic[3]
 dic = {cle : int(valeur) for cle, valeur in dic.items() }
+print(dic[:5])
+max_dic_cle = max(dic.keys())
+print(f"plus grande clé : {max_dic_cle}")
+
+print(f"liste clés : {[cle for cle in dic.keys()]}")
+position = 0
+while position in [cle for cle in dic.keys() ] :
+    position +=1
+    print(f"position : {position}")
 
 lliste = [(x , y)  for x  in range(4) for y in range(4)]
 print(lliste)
@@ -14,7 +24,7 @@ print(16 in dic["B"])
 max_dic = max(dic.values())
 print(max_dic)
 print(f"dictionnaire : {dic}")
-dic["B"].
+
 
 print("ok")
 
@@ -27,8 +37,6 @@ for valeur in dic.values() :
 print(max)
 
 
-max_dic = max(dic.values())
-print(f"valeur max : {max_dic}")
 
 for clé in dic.keys() :
     if dic[clé] == max_dic :
