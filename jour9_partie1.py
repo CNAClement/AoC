@@ -90,10 +90,5 @@ def recherche_position_premier_point(dic) :
 def recherche_position_dernier_identifiant(dic) :
     return max(dic.keys())
 
-def condition_fin(dic) :
-    # Tant que la condition n'est pas remplie et qu'il existe au moins un "." à gauche du dernier chiffre, on continue.
-    return recherche_position_premier_point(dic) > recherche_position_dernier_identifiant(dic)
-
-
 def calcul_resultat(dic):
     return sum(identifiant * position for identifiant, position in dic.items() )

@@ -24,7 +24,6 @@ def lecture_fichier(chemin_fichier):
         lignes = contenu.splitlines()
         return lignes
 
-def chargement_tableau
 
 def pattern(ligne) :
     pattern = re.compile(r"(\d+)+")
